@@ -30,7 +30,7 @@ private val SansSerifTextStyle = SansSerifStyle.copy(
 
 
 @Immutable
-data class SdnTypography(
+data class FusionTypography(
     val title_xl: TextStyle,
     val title_l: TextStyle,
     val title_m: TextStyle,
@@ -48,7 +48,7 @@ data class SdnTypography(
 
 
 
-internal val mobileTypography = SdnTypography(
+internal val mobileTypography = FusionTypography(
     title_xl = SansSerifTitleStyle.copy(
         fontSize = 32.sp,
     ),

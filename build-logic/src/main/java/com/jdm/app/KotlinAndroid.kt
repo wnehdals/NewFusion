@@ -8,9 +8,6 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-/**
- * https://github.com/android/nowinandroid/blob/main/build-logic/convention/src/main/kotlin/com/google/samples/apps/nowinandroid/KotlinAndroid.kt
- */
 internal fun Project.configureKotlinAndroid() {
     // Plugins
     pluginManager.apply("org.jetbrains.kotlin.android")

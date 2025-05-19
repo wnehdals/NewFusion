@@ -1,6 +1,7 @@
 package com.jdm.app.news
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,11 +63,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jdm.app.designsystem.component.ConfirmDialog
 import com.jdm.app.designsystem.component.OutlineTextChip
+import com.jdm.app.designsystem.component.PrimaryButton
+import com.jdm.app.designsystem.component.SecondButton
 import com.jdm.app.designsystem.component.UnderLineTextTab
 import com.jdm.app.designsystem.component.UpDownArrowButton
 import com.jdm.app.designsystem.theme.FusionTheme
 import com.jdm.app.domain.model.ChipState
+import com.jdm.app.domain.model.DialogToken
 import com.jdm.app.model.News
 import com.jdm.app.navigation.Route
 import kotlinx.coroutines.delay
@@ -78,16 +83,15 @@ import java.text.SimpleDateFormat
 fun NewsRoute(
     viewModel: NewsViewModel = hiltViewModel(),
     onBack: () -> Unit,
-    onNavigate: (Route) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val newsLazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-
-
-
+    BackHandler {
+        onBack()
+    }
     NewsScreen(
         modifier = Modifier
             .fillMaxSize()
@@ -110,13 +114,17 @@ fun NewsRoute(
         onSubjectBottomDialogDismiss = {
             viewModel.setEvent(NewsEvent.OnSubjectBottomDialogDismiss)
         },
+        onConfirmDialogDismiss = {
+            viewModel.setEvent(NewsEvent.OnConfirmDialogDismiss)
+        },
         onClickSubjectFilter = {
             viewModel.setEvent(NewsEvent.OnClickSubjectFilter)
         },
         onClickNewNews = {
             viewModel.setEvent(NewsEvent.OnClickNewNews)
         },
-        subjectBottomDialogToken = uiState.subjectDialogToken
+        subjectBottomDialogToken = uiState.subjectDialogToken,
+        dialogToken = uiState.dialogToken
     )
     LaunchedEffect(Unit) {
         viewModel.initData()
@@ -141,7 +149,9 @@ fun NewsScreen(
     newsList: List<News>,
     updatedNewsCnt: Int,
     subjectBottomDialogToken: SubjectDialogToken?,
+    dialogToken: DialogToken?,
     onSubjectBottomDialogDismiss: () -> Unit,
+    onConfirmDialogDismiss: () -> Unit,
     onClickCategoryItem: (ChipState) -> Unit,
     onClickInitialize: () -> Unit,
     onClickComplete: (List<ChipState>) -> Unit,
@@ -150,7 +160,6 @@ fun NewsScreen(
 ) {
     BasicNewsScreen(
         modifier = modifier,
-        newsLazyListState = newsLazyListState,
         dateContents = {
             Text(
                 modifier = Modifier
@@ -170,11 +179,17 @@ fun NewsScreen(
                 onClickItem = onClickCategoryItem
             )
         },
-        newsItems = {
-            NewsItems(
-                items = newsList,
-                onClickItem = {}
-            )
+        newsContents = {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                state = newsLazyListState
+            ) {
+                NewsItems(
+                    items = newsList,
+                    onClickItem = {}
+                )
+            }
         },
         filterContents = {
             Image(
@@ -214,10 +229,7 @@ fun NewsScreen(
                             .width(8.dp)
                     )
                     Text(
-                        text = String.format(
-                            stringResource(R.string.format_new_news),
-                            updatedNewsCnt
-                        ),
+                        text = stringResource(R.string.str_new_news),
                         style = FusionTheme.typography.text_xxs.copy(color = FusionTheme.colors.white)
                     )
                 }
@@ -279,61 +291,41 @@ fun NewsScreen(
                             )
                         },
                         buttonContents = {
-                            Button(
+                            SecondButton(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(48.dp)
-                                    .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
                                     .weight(1f),
+                                text = stringResource(R.string.str_initialization),
                                 onClick = onClickInitialize,
-                                shape = RoundedCornerShape(4.dp),
-                                enabled = true,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = FusionTheme.colors.green300,
-                                    contentColor = FusionTheme.colors.white,
-                                ),
-                                contentPadding = PaddingValues(
-                                    horizontal = 0.dp,
-                                    vertical = 0.dp
-                                )
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.str_initialization),
-                                    style = FusionTheme.typography.title_s.copy(color = FusionTheme.colors.green400),
-                                )
-                            }
+                            )
                             Spacer(
                                 modifier = Modifier
                                     .width(12.dp)
                             )
-                            Button(
+                            PrimaryButton(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(48.dp)
-                                    .defaultMinSize(minWidth = 1.dp, minHeight = 1.dp)
                                     .weight(1f),
+                                text = stringResource(R.string.str_select_complete),
                                 onClick = {
                                     onClickComplete(subjectsState)
-                                },
-                                shape = RoundedCornerShape(4.dp),
-                                enabled = true,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = FusionTheme.colors.green400,
-                                    contentColor = FusionTheme.colors.white,
-                                ),
-                                contentPadding = PaddingValues(
-                                    horizontal = 0.dp,
-                                    vertical = 0.dp
-                                )
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.str_select_complete),
-                                    style = FusionTheme.typography.title_s.copy(color = FusionTheme.colors.white),
-                                )
-                            }
+                                }
+                            )
                         }
                     )
                 }
+            }
+        },
+        dialogContents = {
+            if (dialogToken != null) {
+                ConfirmDialog(
+                    title = dialogToken.title,
+                    rightText = stringResource(dialogToken.rightTextRes),
+                    onDismiss = onConfirmDialogDismiss,
+                    onClickButton = onConfirmDialogDismiss,
+                )
             }
         }
     )
@@ -343,13 +335,13 @@ fun NewsScreen(
 @Composable
 fun BasicNewsScreen(
     modifier: Modifier,
-    newsLazyListState: LazyListState,
     dateContents: @Composable RowScope.() -> Unit,
     categoryItems: LazyListScope.() -> Unit,
-    newsItems: LazyListScope.() -> Unit,
+    newsContents: @Composable () -> Unit,
     filterContents: @Composable RowScope.() -> Unit,
     updatedNewsFloatingContents: @Composable () -> Unit,
-    subjectBottomDialog: @Composable () -> Unit
+    subjectBottomDialog: @Composable () -> Unit,
+    dialogContents: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -427,13 +419,7 @@ fun BasicNewsScreen(
                 )
 
             }
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = newsLazyListState
-            ) {
-                newsItems()
-            }
+            newsContents()
         }
         Column(
             modifier = Modifier
@@ -451,6 +437,7 @@ fun BasicNewsScreen(
 
         }
         subjectBottomDialog()
+        dialogContents()
     }
 }
 
@@ -568,12 +555,12 @@ fun NewsItemScreen(
                 }
 
                 Text(
+                    text = "${title}",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
                             horizontal = 20.dp
                         ),
-                    text = "${id} - ${title}",
                     style = FusionTheme.typography.title_s,
                     overflow = if (isExpand) TextOverflow.Visible else TextOverflow.Ellipsis,
                     maxLines = 1
@@ -826,7 +813,9 @@ fun PreviewNewsScreen(
             updatedNewsCnt = 1,
             subjectBottomDialogToken = null,
             onClickNewNews = {},
-            newsLazyListState = rememberLazyListState()
+            newsLazyListState = rememberLazyListState(),
+            dialogToken = null,
+            onConfirmDialogDismiss = {}
         )
     }
 }

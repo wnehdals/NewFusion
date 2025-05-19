@@ -20,9 +20,6 @@ fun MainNavHost(
         startDestination = Route.NewsRoute
     ) {
         newsNavGraph(
-            onNavigate = {
-                navigator.navigate(it)
-            },
             onBack = {
                 navigator.popBackStack()
             }

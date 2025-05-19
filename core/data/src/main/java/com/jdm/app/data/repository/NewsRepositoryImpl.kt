@@ -26,7 +26,10 @@ class NewsRepositoryImpl @Inject constructor(
                 .mapIndexed { index, newsResp ->  newsResp.toDomain(index) }
         }
 
-        val filterList = if (cursor == null) cachedNewsList.toList() else cachedNewsList.filter { it.id > cursor }
+        val filterList =
+            if (cursor == null) cachedNewsList.toList()
+            else cachedNewsList.filter { it.id > cursor }
+
         val newsData = if (filterList.size < pageSize) {
             filterList.mapIndexed { index, it ->
                 it.copy(date = currentTime + (index * 1000L))

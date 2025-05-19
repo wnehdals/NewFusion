@@ -127,7 +127,7 @@ object FusionTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
-    val typography: SdnTypography
+    val typography: FusionTypography
         @Composable
         @ReadOnlyComposable
         get() = LocalTypography.current

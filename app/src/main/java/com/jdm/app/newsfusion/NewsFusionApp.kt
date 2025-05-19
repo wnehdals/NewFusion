@@ -1,4 +1,4 @@
-package com.jdm.app.nesfusion
+package com.jdm.app.newsfusion
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

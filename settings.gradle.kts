@@ -20,7 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NesFusion"
+rootProject.name = "NewsFusion"
 include(":app")
 include(":core:data")
 include(":core:designsystem")
@@ -31,4 +31,4 @@ include(":core:navigation")
 include(":feature:main")
 include(":core:testing")
 include(":feature:news")
-include(":feature:news")
+include(":baselineprofile")

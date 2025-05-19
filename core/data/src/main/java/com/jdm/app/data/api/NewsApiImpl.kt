@@ -4,7 +4,6 @@ import android.content.Context
 import com.jdm.app.data.model.NewsResp
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import java.io.File
 
 class NewsApiImpl(
     private val context: Context,

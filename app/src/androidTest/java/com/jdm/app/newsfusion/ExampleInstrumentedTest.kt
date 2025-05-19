@@ -1,4 +1,4 @@
-package com.jdm.app.nesfusion
+package com.jdm.app.newsfusion
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

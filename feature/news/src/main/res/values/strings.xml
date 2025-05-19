@@ -4,7 +4,7 @@
     <string name="str_stock">주식</string>
     <string name="str_economic_presentation">결제 발표</string>
     <string name="str_news">뉴스</string>
-    <string name="format_new_news">새로운 뉴스 %d개</string>
+    <string name="str_new_news">새로운 뉴스</string>
     <string name="str_subject_01">미국 주식</string>
     <string name="str_subject_02">한국 주식</string>
     <string name="str_subject_03">아시아 주식</string>
@@ -20,5 +20,6 @@
     <string name="str_initialization">초기화</string>
     <string name="str_select_complete">선택 완료</string>
     <string name="str_new">New</string>
+    <string name="str_confirm">확인</string>
 
 </resources>
