@@ -36,9 +36,9 @@ NewsFusion
 
 상태는 아래로 이동하고 이벤트는 위로 이동하는 단방향 데이터 흐름(UDF)으로 구성되어 있습니다.
 
-![img](https://lh5.googleusercontent.com/Cy5hT9u87lJ9w4mKtGOvyWIaHAUMXQJakV_1RVdjeHGeAUFMnTS1P33yan05Sw5AcPbfkI6DiXt4SupBVnziDjl-ylvNqhTb0u1uZWTgp0saetrqFYhjH0LrxTocOFIKOvOSZ26wYSJDJi6nrRUrUJg)
+![Image](https://github.com/user-attachments/assets/0236eefe-f2c9-4db1-9e70-049d3bead1d0)
 
 ### Module
 
 본 프로젝트는 Multi-module 구조이며 각 Feature마다 모듈 형태로 구성되어 있습니다.
-
+![Image](https://github.com/user-attachments/assets/18f3b6d2-58a1-409b-9bbb-d9a5a26dc8b4)
