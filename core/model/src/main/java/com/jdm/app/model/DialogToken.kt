@@ -1,4 +1,4 @@
-package com.jdm.app.domain.model
+package com.jdm.app.model
 
 data class DialogToken(
     val title: String = "",

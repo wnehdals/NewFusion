@@ -1,16 +1,15 @@
 package com.jdm.app.domain.model
 
+import com.jdm.app.model.SanckbarToken
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
-data class SanckbarToken(val id: Long, val text: String)
 
-/**
- * Class responsible for managing Snackbar messages to show on the screen
- */
+
+
 object SnackbarManager {
 
     private val _messages: MutableStateFlow<List<SanckbarToken>> = MutableStateFlow(emptyList())

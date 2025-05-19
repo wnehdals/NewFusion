@@ -3,8 +3,8 @@ package com.jdm.app.news
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jdm.app.domain.model.ChipState
-import com.jdm.app.domain.model.DialogToken
+import com.jdm.app.model.ChipState
+import com.jdm.app.model.DialogToken
 import com.jdm.app.domain.usecase.GetNewsListUseCase
 import com.jdm.app.model.CategoryCode
 import com.jdm.app.model.News
@@ -83,7 +83,7 @@ class NewsViewModel @Inject constructor(
             viewModelScope.launch { _sideEffect.send(effectValue) }
         }
     }
-
+   
     /**
      * 초기 데이터 설정
      * 오늘 날짜 설정
@@ -141,7 +141,9 @@ class NewsViewModel @Inject constructor(
                     cursor = currentState.cursor,
                     currentTime = currentTime
                 ).collect {
-
+                    it.data.forEach {
+                        Log.e("sdfsdf", it.toString())
+                    }
                     intent {
                         val newNews = currentState.totalNews.toMutableList()
                         newNews.addAll(it.data)

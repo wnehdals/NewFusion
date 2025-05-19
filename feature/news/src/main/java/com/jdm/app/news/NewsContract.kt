@@ -1,7 +1,7 @@
 package com.jdm.app.news
 
-import com.jdm.app.domain.model.ChipState
-import com.jdm.app.domain.model.DialogToken
+import com.jdm.app.model.ChipState
+import com.jdm.app.model.DialogToken
 import com.jdm.app.model.News
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

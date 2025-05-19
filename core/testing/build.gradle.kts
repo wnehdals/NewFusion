@@ -13,6 +13,11 @@ android {
 dependencies {
     //implementation(libs.androidx.core.ktx)
     //testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    api(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    api(libs.coroutines.test)
+    api(libs.junit)
+    api(projects.core.data)
+    api(projects.core.model)
+
 }
