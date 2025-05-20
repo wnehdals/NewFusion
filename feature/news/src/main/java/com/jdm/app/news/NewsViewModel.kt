@@ -108,8 +108,6 @@ class NewsViewModel @Inject constructor(
                     cursor = it.cursor,
                 )
             }
-            delay(10 * 1000L)
-            getNewsContentsSubscribe()
         }.catch {
             intent {
                 copy(
@@ -128,12 +126,13 @@ class NewsViewModel @Inject constructor(
      * 오늘 날짜 업데이트
      * News 데이터 호출 시간 업데이트
      */
-    private fun getNewsContentsSubscribe() {
+    fun getNewsContentsSubscribe() {
         /* 중복 호출 방지 */
         if (subscriptionJob?.isActive == true) return
 
         subscriptionJob = viewModelScope.launch(ceh) {
             while (true) {
+                delay(10 * 1000L)
                 var currentTime = System.currentTimeMillis()
                 val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
                 val timeFormat = SimpleDateFormat("HH:mm:ss")
@@ -156,7 +155,7 @@ class NewsViewModel @Inject constructor(
                 }
                 if (currentState.cursor == null) break
 
-                delay(10 * 1000L)
+
             }
 
         }

@@ -25,11 +25,12 @@ class NewsRepositoryImpl @Inject constructor(
             cachedNewsList = newsApi.getNewsContents()
                 .mapIndexed { index, newsResp ->  newsResp.toDomain(index) }
         }
-
+        /* cursor 이후 순번 뉴스 리스트 */
         val filterList =
             if (cursor == null) cachedNewsList.toList()
             else cachedNewsList.filter { it.id > cursor }
 
+        /* pageSize 보다 적으면 filterList, 크다면 filterList에서 10개만 뽑은 뉴스 리스트 */
         val newsData = if (filterList.size < pageSize) {
             filterList.mapIndexed { index, it ->
                 it.copy(date = currentTime + (index * 1000L))

@@ -121,6 +121,7 @@ fun NewsRoute(
     )
     LaunchedEffect(Unit) {
         viewModel.initData()
+        viewModel.getNewsContentsSubscribe()
     }
     LaunchedEffect(uiState.filteredNews.size) {
         coroutineScope.launch {
@@ -161,9 +162,15 @@ fun NewsScreen(
                 text = today,
                 style = FusionTheme.typography.title_m
             )
+            Image(
+                modifier = Modifier
+                    .size(16.dp),
+                painter = painterResource(R.drawable.ic_refresh_black),
+                contentDescription = "refresh icon"
+            )
             Text(
                 text = updateTime,
-                style = FusionTheme.typography.text_xs
+                style = FusionTheme.typography.text_s
             )
         },
         categoryItems = {
@@ -780,10 +787,9 @@ fun PreviewNewsItemScreen(
     FusionTheme {
         NewsItemScreen(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp),
+                .fillMaxWidth(),
             id = 1,
-            title = "한국 주식 상승 마감",
+            title = "한국 주식 상승 마감 미국 경제지표 관련 최신 소비자물가지수(CPI)가 최근 발표되어, 전월 대비 0.4% 소폭 증가하며 시장 컨센서스에 부합했습니다. 이는 현재 거시경제 상황에 대한 안정적인 시그널로 해석됩니다.",
             time = 0,
             category = "경제발표",
             subject = "미국 경제지표",
@@ -791,6 +797,7 @@ fun PreviewNewsItemScreen(
             content = "미국 경제지표 관련 최신 소비자물가지수(CPI)가 최근 발표되어, 전월 대비 0.4% 소폭 증가하며 시장 컨센서스에 부합했습니다. 이는 현재 거시경제 상황에 대한 안정적인 시그널로 해석됩니다.",
             true
         )
+
     }
 }
 
@@ -802,7 +809,8 @@ fun PreviewNewsScreen(
     FusionTheme {
         NewsScreen(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(FusionTheme.colors.white),
             today = "2025년 05월 13일",
             updateTime = "2025-05-13 14:00:00",
             chipStates = listOf(
@@ -812,7 +820,98 @@ fun PreviewNewsScreen(
                 ChipState("경제 발표", R.string.str_economic_presentation, false),
                 ChipState("뉴스", R.string.str_news, false)
             ),
-            newsList = listOf(),
+            newsList = listOf(
+                News(
+                    id = 10,
+                    category = "중요",
+                    subject = "시장 분석",
+                    title = "외환 시장 변동성 확대",
+                    content = "계량적 모델 분석 결과, 국제 외환 시장은(는) 소비자 신뢰지수 변화으로 인해 변동성이 큰 흐름을 보이고 있습니다 . 투자자들은 향후1 분기 동안 높은 변동성 지속에 대비해야 할 것입니다.",
+                    source = "KDI 경제전망",
+                    date = 1747666881281L,
+                    isNew = false
+                ),
+                News(
+                    id = 11,
+                    category = "뉴스",
+                    subject = "지정학",
+                    title = "아태지역 정상회담 개최",
+                    content = "아시아 태평양 지역의 지정학적 주요국 정상회담 개최 소식이 전해지면서 글로벌 금융시장에 긍정적인 영향을 주고 있습니다 . 글로벌 교역량 변동이 (가) 이번 사태의 주요 배경으로 분석됩니다.",
+                    source = "세계경제포럼",
+                    date = 1747666882281L,
+                    isNew = false
+                ),
+                News(
+                    id = 12,
+                    category = "경제 발표",
+                    subject = "아시아 경제지표",
+                    title = "아시아 소매판매 급등",
+                    content = "아시아 경제지표 관련 월간 소매판매 동향이 최근 발표되어, 전월 대비 3.5 % 급등세를 나타내며 기존 전망치를 크게 웃돌았습니다 . 이는 현재 거시경제 상황에 대한 긍정적인 시그널로 해석됩니다.",
+                    source = "아시아개발은행",
+                    date = 1747666883281L,
+                    isNew = false
+                ),
+                News(
+                    id = 13,
+                    category = "주식",
+                    subject = "유럽 주식",
+                    title = "유럽 주식 급등 기록",
+                    content = "유럽 주식 시장은 시장 참여자들이 선별적인 투자 확대에 따라 이례적인 급등을 기록했습니다 . 특히 신재생에너지 관련 기업 분야가 점진적인 추세를 이어가고 있습니다 . 기업들의 실적 호조 등이 시장 분위기를 좌우했습니다 .",
+                    source = "로이터Biz",
+                    date = 1747666884281L,
+                    isNew = false
+                ),
+                News(
+                    id = 14,
+                    category = "중요",
+                    subject = "무역",
+                    title = "중국과 무역 협정 체결",
+                    content = "중국과의 무역 관련 새로운 공급망 협정 체결이 핵심 이슈로 부상하며, 국제 교역 질서에 주목할 만한 상황을 연출하고 있습니다 . 관련 산업계의 면밀한 검토가 필요합니다 .",
+                    source = "OPEC 인사이트",
+                    date = 1747666885281L,
+                    isNew = false
+                ),
+                News(
+                    id = 15,
+                    category = "뉴스",
+                    subject = "에너지",
+                    title = "LNG 가격 안정세 유지",
+                    content = "액화천연가스(LNG) 가격이 국제 원자재 가격 급등에 따라 안정적인 수준을 유지했습니다 . 이는 글로벌 에너지 시장의 패러다임 변화를 예고하며 혼조세의 움직임을 나타내고 있습니다 .",
+                    source = "유로 Stoxx 뉴스",
+                    date = 1747666886281L,
+                    isNew = false
+                ),
+                News(
+                    id = 16,
+                    category = "경제 발표",
+                    subject = "미국 경제지표",
+                    title = "미 PPI 예상 하회",
+                    content = "미국 경제지표 관련 생산자물가지수 (PPI) 가 최근 발표되어, 전월 대비 0.3 % 예상외로 급락하며 예상보다 다소 부진했습니다.이는 현재 거시경제 상황에 대한 불확실한 시그널로 해석됩니다 .",
+                    source = "기재부 발표",
+                    date = 1747666887281L,
+                    isNew = false
+                ),
+                News(
+                    id = 17,
+                    category = "주식",
+                    subject = "한국 주식",
+                    title = "한국 주식 약보합 마감",
+                    content = "한국 주식 시장은 외국인 투자자들이 신중한 차익 실현에 따라 보합권에서 등락을 거듭했습니다 . 특히 필수소비재 업종 분야가 부정적인 결과를 도출했습니다 . 지정학적 리스크 고조 등이 시장 분위기를 좌우했습니다 .",
+                    source = "연합경제",
+                    date = 1747666888281L,
+                    isNew = false
+                ),
+                News(
+                    id = 18,
+                    category = "중요",
+                    subject = "시장 분석",
+                    title = "원자재 시장 강세 전망",
+                    content = "투자 심리 지표를 보면, 국제 금 가격은(는) 혁신 기술의 등장으로 인해 긍정적인 양상을 띠고 있습니다.투자자들은 향후 3 분기 동안 점진적 회복세에 대비해야 할 것입니다 .",
+                    source = "국제금융센터",
+                    date = 1747666889281L,
+                    isNew = false
+                )
+            ),
             onClickComplete = {},
             onClickInitialize = {},
             onClickSubjectFilter = {},
