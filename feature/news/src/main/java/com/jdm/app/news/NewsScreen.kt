@@ -173,15 +173,30 @@ fun NewsScreen(
             )
         },
         newsContents = {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = newsLazyListState
-            ) {
-                NewsItems(
-                    items = newsList,
-                    onClickItem = {}
-                )
+            if (newsList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(
+                                Alignment.Center
+                            ),
+                        text = stringResource(R.string.str_empty_news)
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    state = newsLazyListState
+                ) {
+                    NewsItems(
+                        items = newsList,
+                        onClickItem = {}
+                    )
+                }
             }
         },
         filterContents = {

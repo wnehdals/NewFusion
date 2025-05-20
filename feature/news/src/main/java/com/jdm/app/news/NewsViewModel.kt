@@ -3,10 +3,10 @@ package com.jdm.app.news
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jdm.app.model.ChipState
-import com.jdm.app.model.DialogToken
 import com.jdm.app.domain.usecase.GetNewsListUseCase
 import com.jdm.app.model.CategoryCode
+import com.jdm.app.model.ChipState
+import com.jdm.app.model.DialogToken
 import com.jdm.app.model.News
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -83,7 +83,7 @@ class NewsViewModel @Inject constructor(
             viewModelScope.launch { _sideEffect.send(effectValue) }
         }
     }
-   
+
     /**
      * 초기 데이터 설정
      * 오늘 날짜 설정
@@ -141,9 +141,6 @@ class NewsViewModel @Inject constructor(
                     cursor = currentState.cursor,
                     currentTime = currentTime
                 ).collect {
-                    it.data.forEach {
-                        Log.e("sdfsdf", it.toString())
-                    }
                     intent {
                         val newNews = currentState.totalNews.toMutableList()
                         newNews.addAll(it.data)
@@ -294,9 +291,6 @@ class NewsViewModel @Inject constructor(
         val notNullNewsList: MutableList<News> =
             news?.toMutableList() ?: currentState.news.toMutableList()
         notNullNewsList.sort()
-        notNullNewsList.forEach {
-            Log.e("sdfs", "${it.id} - ${it.isNew}")
-        }
         val checkedCategory = category ?: currentState.category.first { it.isChecked }
         val checkedCategoryCode: CategoryCode = CategoryCode.find(checkedCategory.id)
 
